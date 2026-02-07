@@ -19,6 +19,7 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Lob
     @Column(length = 500)
     private String description;
 }
