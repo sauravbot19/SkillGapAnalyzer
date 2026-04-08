@@ -15,11 +15,10 @@ Version <strong>1.0</strong> represents a complete learning milestone covering u
 
 <h2>🛠 Tech Stack</h2>
 <ul>
-  <li><strong>Java 24</strong></li>
+  <li><strong>Java 17</strong></li>
   <li><strong>Spring Boot 4</strong></li>
   <li>Spring Data JPA</li>
   <li>MySQL</li>
-  <li>Swagger (OpenAPI) – API documentation</li>
   <li>Lombok</li>
   <li>Maven</li>
   <li>Postman – API testing</li>
