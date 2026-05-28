@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS resumes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    s3_url VARCHAR(500) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS analyses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    resume_id BIGINT NOT NULL,
+    jd_text TEXT NOT NULL,
+    match_percentage INT,
+    matching_skills TEXT,
+    missing_skills TEXT,
+    suggestions TEXT,
+    verdict VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+);
