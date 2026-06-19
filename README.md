@@ -1,122 +1,96 @@
-# 🎯 SkillGap Analyzer - AI-Powered Resume & Job Fit Analysis
+# 🎯 SkillGapAnalyzer - AI-Powered Resume & Job Fit Analysis
 
-> **Enterprise-Grade Cloud-Native Application for Resume Analysis & Skill Gap Assessment using LLMs**
+> **Production-Grade Full-Stack Application for Resume Analysis & Skill Gap Assessment using LLMs**
 
 [![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=java)](https://www.java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0-green?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React.js-Latest-blue?style=flat-square&logo=react)](https://react.dev/)
 [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=flat-square&logo=amazon-aws)](https://aws.amazon.com/)
 [![AI-Powered](https://img.shields.io/badge/AI-Groq%20LLaMA%203-blueviolet?style=flat-square)](https://groq.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 ---
 
 ## 📋 Overview
 
-**SkillGap Analyzer** is a cutting-edge, production-grade web application that leverages **Large Language Models (LLMs)** to analyze resumes against job descriptions. It provides deep insights into:
+**SkillGapAnalyzer** is a production-grade full-stack web application that uses **Large Language Models (LLMs)** to analyze resumes against job descriptions. Built as an upgrade from a basic skill-gap calculator (v1.0) to an AI-powered cloud-native platform (v2.0).
 
-✅ **Skill Gap Analysis** - Identify missing and below-proficiency skills  
-✅ **ATS Compatibility** - Resume optimization for Applicant Tracking Systems  
-✅ **Match Score** - Quantifiable job-fit percentage  
-✅ **Matching Technologies** - Which tech stack aligns with JD  
-✅ **AI-Powered Recommendations** - Actionable improvement suggestions  
-✅ **PDF Resume Processing** - Direct file uploads with S3 storage  
-✅ **JWT Authentication** - Secure user authentication  
-✅ **Analysis History** - Track and compare multiple analyses  
+It provides:
 
-**Perfect for:**
-- 💼 Job seekers optimizing resumes
-- 🏢 Recruiters evaluating candidate fit
-- 👔 HR teams analyzing internal talent
-- 📊 Career coaches providing guidance
+✅ **AI-Powered Skill Gap Analysis** — Identify matching and missing skills using Groq LLaMA 3.1  
+✅ **Match Score** — Quantifiable job-fit percentage (0–100%)  
+✅ **PDF Resume Processing** — Upload PDF, extract text via PDFBox, store on AWS S3  
+✅ **JWT Authentication** — Secure register/login with token-based auth  
+✅ **Analysis History** — Track and revisit all past analyses  
+✅ **Improvement Suggestions** — AI-generated actionable career recommendations  
+✅ **React Frontend** — Clean, responsive UI with full end-to-end flow  
 
 ---
 
-## ✨ Key Features (v2.0 - Upgraded)
+## ✨ Key Features
 
-### 🤖 **AI-Powered Resume Analysis**
-- **LLM Integration**: Uses Groq's LLaMA 3 for intelligent analysis
-- **Resume PDF Processing**: Direct PDF upload and parsing via Apache PDFBox
-- **Job Description Analysis**: Extract requirements from job postings
-- **Semantic Understanding**: Deep NLP analysis beyond keyword matching
+### 🤖 AI-Powered Resume Analysis
+- **LLM Integration** — Groq API with LLaMA 3.1-8b-instant model
+- **PDF Resume Processing** — Direct PDF upload and text extraction via Apache PDFBox
+- **Semantic Skill Matching** — Alias-aware matching (e.g. Hibernate/JPA, Java 8+/Java 17, REST APIs/RESTful)
+- **Accurate Gap Detection** — Only flags skills required in JD but missing from resume
 
-### 📊 **Comprehensive Skill Assessment**
-- Match Score calculation (0-100%)
-- Matching skills categorization
+### 📊 Comprehensive Skill Assessment
+- Match percentage calculation (0–100%)
+- Matching skills identification
 - Missing skills identification
-- Below-proficiency skill detection
-- Technology stack alignment
+- AI-generated improvement suggestions
+- Verdict: Weak / Moderate / Good / Strong Match
 
-### 📄 **Resume Intelligence**
-- ATS compatibility scoring
-- Keyword optimization suggestions
-- Format and structure analysis
-- Content gap identification
-- Improvement recommendations
+### 👤 User Authentication & Security
+- JWT-based authentication (24hr expiry)
+- Secure register and login
+- All protected routes require valid Bearer token
+- BCrypt password hashing
 
-### 👤 **User Authentication & Security**
-- JWT-based authentication
-- Secure registration/login
-- User profile management
-- Analysis history per user
-- Role-based access control
+### ☁️ Cloud Storage
+- AWS S3 for PDF resume storage (Mumbai region)
+- MySQL database with Flyway schema migration
+- Resume metadata stored with S3 URL reference
 
-### 💾 **Cloud Storage & Scalability**
-- AWS S3 for resume storage
-- AWS RDS MySQL for data persistence
-- Elastic Beanstalk deployment
-- Production-ready infrastructure
-
-### 📈 **Analysis Dashboard**
-- View past analyses
-- Compare multiple job fits
-- Track skill improvement over time
-- Export recommendations as PDF
+### 📈 Analysis Dashboard (React Frontend)
+- Upload resume + paste job description
+- View AI analysis result with skill pills
+- View full analysis history
+- Delete past analyses
+- Responsive UI with no CSS framework dependency
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Frontend (React.js)                      │
-│  - Resume Upload UI  - Job Description Input               │
-│  - Analysis Results Display - History Dashboard            │
-└─────────────────────┬───────────────────────────────────────┘
-                      │ HTTPS
-┌─────────────────────▼───────────────────────────────────────┐
-│              API Gateway / Load Balancer                    │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────────────┐
-│            Spring Boot Backend (Java 17)                    │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │         REST Controllers (8 Endpoints)              │   │
-│  │  - Auth Controller (Register, Login, Validate)      │   │
-│  │  - Resume Controller (Upload, Process, Retrieve)    │   │
-│  │  - Analysis Controller (Run Analysis, Get History)  │   │
-│  └─────────────────────┬───────────────────────────────┘   │
-│                        │                                    │
-│  ┌─────────────────────▼───────────────────────────────┐   │
-│  │         Service Layer (Business Logic)              │   │
-│  │  - AuthService (JWT handling)                       │   │
-│  │  - ResumeService (PDF processing)                   │   │
-│  │  - AnalysisService (Gap analysis engine)            │   │
-│  │  - LLMService (Groq API integration)                │   │
-│  └─────────────────────┬───────────────────────────────┘   │
-│                        │                                    │
-│  ┌─────────────────────▼───────────────────────────────┐   │
-│  │      Repository & Data Access Layer (JPA)           │   │
-│  └─────────────────────┬───────────────────────────────┘   │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-        ┌─────────────┼─────────────┬──────────────┐
-        │             │             │              │
-┌───────▼───┐ ┌──────▼────┐ ┌─────▼──────┐  ┌────▼────┐
-│  AWS S3   │ │ AWS RDS   │ │ Groq LLM   │  │  Redis  │
-│ (Resume   │ │ (MySQL DB)│ │  (Analysis)│  │ (Cache) │
-│ Storage)  │ │           │ │            │  │         │
-└───────────┘ └───────────┘ └────────────┘  └─────────┘
+[client] React Frontend (Vite) — localhost:5173
+
+[lb] Load Balancer (AWS ALB) — planned
+
+[service] Auth Service — /auth/**
+[service] Resume Service — /resume/**
+[service] Analysis Service — /analysis/**
+
+[storage] AWS S3 — PDF storage
+[database] MySQL (local / AWS RDS)
+[external] Groq AI API — LLaMA 3.1
+
+React Frontend → Spring Boot Backend : HTTPS + JWT Bearer Token
+
+Auth Service → MySQL : validate credentials, store user
+Auth Service → React : JWT token response
+
+Resume Service → AWS S3 : upload PDF
+Resume Service → MySQL : save resume metadata
+
+Analysis Service → MySQL : fetch resume S3 URL
+Analysis Service → AWS S3 : download PDF bytes
+Analysis Service → PDFBox : extract plain text
+Analysis Service → Groq AI API : POST prompt (resumeText + jobDescription)
+Groq AI API → Analysis Service : JSON response
+Analysis Service → MySQL : persist analysis result
+Analysis Service → React : return analysis response
 ```
 
 ---
@@ -125,19 +99,21 @@
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| **Backend Language** | Java 17 | Core Application Logic |
-| **Framework** | Spring Boot 4.0 | REST API & Web Framework |
-| **Security** | Spring Security + JWT | Authentication & Authorization |
-| **PDF Processing** | Apache PDFBox 3.0 | Resume Parsing |
-| **AI/LLM** | Groq API (LLaMA 3) | Intelligent Analysis |
-| **Database** | AWS RDS MySQL 8.0+ | Data Persistence |
-| **File Storage** | AWS S3 | Resume & Document Storage |
-| **Frontend** | React.js | User Interface |
-| **Deployment** | AWS Elastic Beanstalk + Vercel | Cloud Hosting |
-| **Build Tool** | Maven 3.8+ | Dependency Management |
-| **ORM** | Spring Data JPA + Hibernate | Database Mapping |
-| **Migration** | Flyway | Database Schema Management |
-| **Documentation** | Springdoc OpenAPI | API Documentation |
+| **Backend Language** | Java 17 | Core application logic |
+| **Framework** | Spring Boot 4.0.2 | REST API + web framework |
+| **Security** | Spring Security 7 + JWT (JJWT 0.11.5) | Auth & authorization |
+| **PDF Processing** | Apache PDFBox 3.0.1 | Resume text extraction |
+| **AI / LLM** | Groq API (LLaMA 3.1-8b-instant) | Intelligent analysis |
+| **HTTP Client** | Spring WebFlux (WebClient) | Non-blocking Groq API calls |
+| **Database** | MySQL 8.0 | Data persistence |
+| **ORM** | Spring Data JPA + Hibernate 7 | Database mapping |
+| **Migration** | Flyway | Schema version control |
+| **File Storage** | AWS S3 (ap-south-1) | PDF resume storage |
+| **Frontend** | React.js + Vite | User interface |
+| **Routing** | React Router DOM | SPA navigation |
+| **HTTP Client (FE)** | Axios | API calls + JWT interceptor |
+| **Build Tool** | Maven 3.8+ | Dependency management |
+| **API Docs** | Springdoc OpenAPI | Swagger UI |
 
 ---
 
@@ -145,48 +121,68 @@
 
 | # | Method | Endpoint | Auth | Description |
 |---|--------|----------|------|-------------|
-| 1 | POST | `/api/auth/register` | ❌ | User registration |
-| 2 | POST | `/api/auth/login` | ❌ | User login with JWT token |
-| 3 | POST | `/api/resume/upload` | ✅ | Upload PDF resume to S3 |
-| 4 | GET | `/api/resume/{id}` | ✅ | Retrieve resume metadata |
-| 5 | POST | `/api/analysis/run` | ✅ | Execute AI-powered gap analysis |
-| 6 | GET | `/api/analysis/history` | ✅ | Get user's analysis history |
-| 7 | GET | `/api/analysis/{id}` | ✅ | Retrieve specific analysis result |
-| 8 | DELETE | `/api/analysis/{id}` | ✅ | Delete analysis record |
+| 1 | POST | `/auth/register` | ❌ | User registration |
+| 2 | POST | `/auth/login` | ❌ | User login, returns JWT token |
+| 3 | POST | `/resume/upload` | ✅ | Upload PDF resume to AWS S3 |
+| 4 | POST | `/analysis/start` | ✅ | Run AI-powered resume analysis |
+| 5 | GET | `/analysis/history` | ✅ | Get all analyses for logged-in user |
+| 6 | GET | `/analysis/{id}` | ✅ | Get specific analysis result |
+| 7 | DELETE | `/analysis/{id}` | ✅ | Delete analysis record |
 
 ---
 
 ## 📊 Database Schema
 
 ```sql
-users (id, email, password, firstName, lastName, createdAt)
-  ├── resumes (id, userId, s3Key, fileName, fileSize, uploadedAt)
-  │    └── [PDF stored in AWS S3]
-  │
-analyses (id, userId, resumeId, jobDescription, matchScore, 
-          matchingSkills, missingSkills, suggestedImprovements, 
-          atsScore, createdAt)
+-- Users table
+users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255),
+  email VARCHAR(255) UNIQUE,
+  password VARCHAR(255),
+  created_at DATETIME
+)
+
+-- Resumes table
+resumes (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT REFERENCES users(id),
+  s3_url VARCHAR(500),
+  file_name VARCHAR(255),
+  uploaded_at DATETIME
+)
+
+-- Analyses table
+analyses (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  resume_id BIGINT REFERENCES resumes(id),
+  jd_text TEXT,
+  match_percentage INT,
+  matching_skills TEXT,
+  missing_skills TEXT,
+  suggestions TEXT,
+  verdict VARCHAR(50),
+  created_at DATETIME
+)
 ```
 
-**Core Tables:**
-- `users` - User accounts with JWT credentials
-- `resumes` - Resume metadata and S3 references
-- `analyses` - Analysis results and LLM outputs
-- `refresh_tokens` - JWT token management (optional)
+Managed by **Flyway** — schema auto-created on first run via `V1__init_schema.sql`.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Java 17+** - JDK Installation
-- **Maven 3.8+** - Build tool
-- **MySQL 8.0+** - Database
-- **AWS Account** - S3 bucket & RDS instance
-- **Groq API Key** - LLM access
-- **Node.js 16+** - Frontend (if running React locally)
+- **Java 17+**
+- **Maven 3.8+**
+- **MySQL 8.0+**
+- **Node.js 18+**
+- **AWS Account** — S3 bucket
+- **Groq API Key** — [console.groq.com](https://console.groq.com)
 
-### Installation
+---
+
+### Backend Setup
 
 #### 1. Clone the Repository
 ```bash
@@ -194,151 +190,132 @@ git clone https://github.com/sauravbot19/SkillGapAnalyzer.git
 cd SkillGapAnalyzer
 ```
 
-#### 2. Backend Setup
-
-**2a. Configure Database**
-```bash
-# Create MySQL database
-mysql -u root -p < src/main/resources/db/migration/V1__initial_schema.sql
+#### 2. Create MySQL Database
+```sql
+CREATE DATABASE skillgapanalyzer;
 ```
 
-**2b. Update Application Properties**
+#### 3. Configure application.properties
+Copy the example file and fill in your real values:
 ```bash
-# Edit src/main/resources/application.properties
+cp src/main/resources/application.properties.example src/main/resources/application.properties
+```
+
+Edit `application.properties`:
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/skillgapanalyzer
 spring.datasource.username=root
-spring.datasource.password=YOUR_PASSWORD
+spring.datasource.password=YOUR_DB_PASSWORD
+
+aws.access-key=YOUR_AWS_ACCESS_KEY
+aws.secret-key=YOUR_AWS_SECRET_KEY
+aws.s3.bucket=your-s3-bucket-name
+aws.s3.region=ap-south-1
+
+groq.api.key=YOUR_GROQ_API_KEY
+groq.model=llama-3.1-8b-instant
+
+jwt.secret=YOUR_JWT_SECRET_MIN_32_CHARS
+jwt.expiration=86400000
 ```
 
-**2c. Set Environment Variables**
+#### 4. Run the Backend
 ```bash
-export AWS_ACCESS_KEY=your_aws_access_key
-export AWS_SECRET_KEY=your_aws_secret_key
-export GROQ_API_KEY=your_groq_api_key
-```
-
-**2d. Build & Run**
-```bash
-# Build
-mvn clean install
-
-# Run the application
 mvn spring-boot:run
-
-# Application starts on: http://localhost:8080
-```
-
-#### 3. Frontend Setup (React)
-```bash
-cd frontend
-npm install
-npm start
-# Frontend runs on: http://localhost:3000
+# Backend starts on: http://localhost:8080
+# Swagger UI: http://localhost:8080/swagger-ui.html
 ```
 
 ---
 
-## 🔑 Environment Variables
+### Frontend Setup
 
-Create a `.env` file in the project root with the following variables:
-
-```env
-# Database
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_DATABASE=skillgapanalyzer
-MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-
-# AWS Configuration
-AWS_ACCESS_KEY=your_aws_access_key_id
-AWS_SECRET_KEY=your_aws_secret_access_key
-AWS_S3_BUCKET=skillgapanalyzer-resume-storage
-AWS_REGION=ap-south-1
-
-# Groq LLM API
-GROQ_API_KEY=your_groq_api_key
-GROQ_API_URL=https://api.groq.com/openai/v1/chat/completions
-GROQ_MODEL=llama-3.1-8b-instant
-
-# JWT Configuration
-JWT_SECRET=your_jwt_secret_key_min_32_chars
-JWT_EXPIRATION=86400000
-
-# Application
-SPRING_PROFILES_ACTIVE=prod
-SERVER_PORT=8080
+```bash
+cd sgafrontend
+npm install
+npm run dev
+# Frontend starts on: http://localhost:5173
 ```
 
 ---
 
 ## 📝 API Usage Examples
 
-### 1. User Registration
+### 1. Register
 ```bash
-curl -X POST http://localhost:8080/api/auth/register \
+curl -X POST http://localhost:8080/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "user@example.com",
-    "password": "SecurePassword123",
-    "firstName": "John",
-    "lastName": "Doe"
-  }'
-```
-
-### 2. User Login
-```bash
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePassword123"
-  }'
-
-# Response: { "token": "jwt_token_here" }
-```
-
-### 3. Upload Resume
-```bash
-curl -X POST http://localhost:8080/api/resume/upload \
-  -H "Authorization: Bearer jwt_token_here" \
-  -F "file=@resume.pdf"
-
-# Response: { "id": 1, "s3Key": "resumes/user123/resume.pdf", "fileName": "resume.pdf" }
-```
-
-### 4. Run Analysis
-```bash
-curl -X POST http://localhost:8080/api/analysis/run \
-  -H "Authorization: Bearer jwt_token_here" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "resumeId": 1,
-    "jobDescription": "We are looking for a Senior Java Developer with 5+ years of Spring Boot experience..."
+    "name": "Saurav Tayade",
+    "email": "saurav@example.com",
+    "password": "test12345"
   }'
 
 # Response:
 {
-  "id": 1,
-  "matchScore": 78,
-  "matchingSkills": ["Java", "Spring Boot", "MySQL"],
-  "missingSkills": ["Kubernetes", "AWS", "Docker"],
-  "belowProficiencySkills": ["Spring Cloud"],
-  "atsScore": 85,
-  "suggestions": [
-    "Add Kubernetes experience to skills section",
-    "Emphasize AWS cloud projects",
-    "Improve technical keywords for ATS"
-  ]
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "name": "Saurav Tayade",
+  "email": "saurav@example.com"
 }
 ```
 
-### 5. Get Analysis History
+### 2. Login
 ```bash
-curl -X GET http://localhost:8080/api/analysis/history \
-  -H "Authorization: Bearer jwt_token_here"
+curl -X POST http://localhost:8080/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "saurav@example.com",
+    "password": "test12345"
+  }'
 
-# Response: Array of past analyses with timestamps
+# Response:
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "name": "Saurav Tayade",
+  "email": "saurav@example.com"
+}
+```
+
+### 3. Upload Resume
+```bash
+curl -X POST http://localhost:8080/resume/upload \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..." \
+  -F "file=@resume.pdf"
+
+# Response:
+{
+  "id": 1,
+  "s3Url": "https://your-bucket.s3.ap-south-1.amazonaws.com/uuid_resume.pdf",
+  "fileName": "resume.pdf",
+  "uploadedAt": "2026-06-19T10:00:00"
+}
+```
+
+### 4. Start Analysis
+```bash
+curl -X POST http://localhost:8080/analysis/start \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resumeId": 1,
+    "jobDescription": "Looking for Java Backend Developer with Spring Boot, REST APIs, MySQL, AWS..."
+  }'
+
+# Response:
+{
+  "analysisId": 1,
+  "matchPercentage": 83,
+  "matchingSkills": "Java, Spring Boot, REST APIs, MySQL, AWS",
+  "missingSkills": "Kubernetes, Docker",
+  "suggestions": "Consider gaining experience with Kubernetes to strengthen containerization skills. Highlight your AWS experience more prominently in the resume. Add Docker to your skillset to align with modern DevOps practices.",
+  "verdict": "Good Match"
+}
+```
+
+### 5. Get History
+```bash
+curl -X GET http://localhost:8080/analysis/history \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."
 ```
 
 ---
@@ -347,16 +324,17 @@ curl -X GET http://localhost:8080/api/analysis/history \
 
 ```
 SkillGapAnalyzer/
-├── src/main/java/com/skillgap/
+├── src/main/java/com/skillgap/analyzer/
 │   ├── controller/
 │   │   ├── AuthController.java
 │   │   ├── ResumeController.java
 │   │   └── AnalysisController.java
 │   ├── service/
 │   │   ├── AuthService.java
-│   │   ├── ResumeService.java
+│   │   ├── ResumeUploadService.java
+│   │   ├── PdfTextExtractorService.java
 │   │   ├── AnalysisService.java
-│   │   └── LLMService.java (Groq Integration)
+│   │   └── GroqAiService.java
 │   ├── repository/
 │   │   ├── UserRepository.java
 │   │   ├── ResumeRepository.java
@@ -367,195 +345,107 @@ SkillGapAnalyzer/
 │   │   └── Analysis.java
 │   ├── dto/
 │   │   ├── LoginRequest.java
-│   │   ├── AnalysisResponse.java
-│   │   └── ResumeUploadResponse.java
+│   │   ├── RegisterRequest.java
+│   │   ├── AuthResponse.java
+│   │   ├── AnalysisRequest.java
+│   │   └── AnalysisResponse.java
 │   ├── security/
-│   │   ├── JwtTokenProvider.java
-│   │   ├── SecurityConfig.java
-│   │   └── CustomUserDetailsService.java
+│   │   ├── JwtUtil.java
+│   │   ├── JwtAuthFilter.java
+│   │   └── SecurityConfig.java
 │   ├── config/
-│   │   ├── AmazonS3Config.java
-│   │   ├── GroqConfig.java
-│   │   └── CorsConfig.java
-│   ├── exception/
-│   │   ├── GlobalExceptionHandler.java
-│   │   └── CustomExceptions.java
-│   └── SkillGapApplication.java
+│   │   ├── AwsS3Config.java
+│   │   ├── WebClientConfig.java
+│   │   └── AppConfig.java
+│   └── SkillGapAnalyzerApplication.java
 │
 ├── src/main/resources/
-│   ├── application.properties
-│   ├── db/migration/
-│   │   ├── V1__initial_schema.sql
-│   │   └── V2__add_analysis_tables.sql
-│   └── templates/
+│   ├── application.properties          ← local only, in .gitignore
+│   ├── application.properties.example  ← safe template, no real secrets
+│   └── db/migration/
+│       └── V1__init_schema.sql
 │
-├── frontend/
-│   ├── public/
+├── sgafrontend/                        ← React Frontend (Vite)
 │   ├── src/
-│   │   ├── components/
 │   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── UploadResume.jsx
+│   │   │   ├── AnalysisResult.jsx
+│   │   │   └── History.jsx
 │   │   ├── services/
-│   │   └── App.js
-│   └── package.json
+│   │   │   └── api.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
 │
 ├── pom.xml
-├── README.md
 ├── .gitignore
-└── docker-compose.yml (for local development)
+└── README.md
 ```
 
 ---
 
 ## 🔄 Project Journey (v1.0 → v2.0)
 
-### **Version 1.0 - Foundation**
-Basic skill gap analysis system comparing user skills vs job role requirements:
+### Version 1.0 — Foundation
+Basic skill gap analysis with manual role/skill management:
 - ✅ User & Role Management
 - ✅ Skill proficiency tracking
 - ✅ Gap calculation engine
-- ✅ Basic recommendations
 
-### **Version 2.0 - ResumeFit AI Upgrade** (Current)
-Enterprise cloud-native AI-powered application with LLM integration:
-- ✅ **AI Integration**: Groq LLaMA 3 for intelligent analysis
-- ✅ **Cloud Infrastructure**: AWS S3, RDS, Elastic Beanstalk
-- ✅ **PDF Processing**: Direct resume file uploads
-- ✅ **Authentication**: JWT-based secure login
-- ✅ **Frontend**: React.js dashboard
-- ✅ **Analysis History**: Track and compare multiple analyses
-- ✅ **ATS Optimization**: Resume scoring for ATS systems
-- ✅ **Production Ready**: Fully scalable, enterprise-grade
+### Version 2.0 — SkillGapAnalyzer (Current)
+Full-stack AI-powered resume analysis platform:
+- ✅ Groq LLaMA 3.1 AI integration
+- ✅ PDF resume upload + text extraction
+- ✅ AWS S3 cloud storage
+- ✅ JWT authentication
+- ✅ React.js frontend (Vite)
+- ✅ Analysis history with delete
+- ✅ Accurate skill aliasing in prompts
 
-### **Upgrade Highlights**
 | Feature | v1.0 | v2.0 |
 |---------|------|------|
 | Resume Upload | ❌ | ✅ PDF to S3 |
-| AI Analysis | ❌ | ✅ Groq LLaMA 3 |
-| Authentication | ❌ | ✅ JWT Auth |
+| AI Analysis | ❌ | ✅ Groq LLaMA 3.1 |
+| JWT Auth | ❌ | ✅ |
 | Cloud Storage | ❌ | ✅ AWS S3 |
-| Database | ✅ Local MySQL | ✅ AWS RDS |
-| Frontend | ❌ | ✅ React.js |
-| Deployment | Local | ✅ Elastic Beanstalk |
-| ATS Scoring | ❌ | ✅ Yes |
-| Analysis History | ❌ | ✅ Yes |
+| Frontend | ❌ | ✅ React + Vite |
+| Analysis History | ❌ | ✅ |
+| Skill Aliasing | ❌ | ✅ |
 
 ---
 
-## 🧪 Testing
+## 📈 Planned — v3.0 Roadmap
 
-### Backend Testing
-```bash
-# Run all tests
-mvn test
-
-# Run specific test class
-mvn test -Dtest=AnalysisServiceTest
-
-# Generate coverage report
-mvn jacoco:report
-```
-
-### API Testing with Postman
-- Import the Postman collection: `docs/SkillGapAnalyzer.postman_collection.json`
-- Update variables: `base_url`, `jwt_token`
-- Run test suite
-
-### Frontend Testing
-```bash
-cd frontend
-npm test
-npm run coverage
-```
+- ☁️ **AWS Elastic Beanstalk** — Backend cloud deployment
+- 🌐 **Vercel** — Frontend deployment
+- 📊 **Analytics Dashboard** — Skill trend tracking over time
+- 🎯 **Interview Prep** — AI-generated interview questions based on JD
 
 ---
 
-## 🚢 Deployment
+## 🔐 Security
 
-### AWS Elastic Beanstalk
-```bash
-# Install EB CLI
-pip install awsebcli
-
-# Initialize EB
-eb init -p "Java 17 running on 64bit Amazon Linux 2" skillgapanalyzer
-
-# Create environment and deploy
-eb create production-env
-eb deploy
-
-# View logs
-eb logs
-```
-
-### Vercel Frontend Deployment
-```bash
-cd frontend
-npm run build
-vercel --prod
-```
+- ✅ JWT tokens with 24hr expiry
+- ✅ BCrypt password hashing
+- ✅ CORS configured for frontend origin
+- ✅ SQL injection prevention via JPA parameterized queries
+- ✅ AWS credentials via environment variables only
+- ✅ `application.properties` in `.gitignore` — never committed
 
 ---
 
-## 📈 Future Enhancements (v3.0 Roadmap)
-
-- 🎓 **Learning Paths**: Generate complete upskilling plans with resources
-- 📊 **Analytics Dashboard**: Advanced metrics and trend analysis
-- 👥 **Team Analysis**: Batch analysis for multiple candidates
-- 🔐 **RBAC**: Role-based access control for enterprises
-- 📱 **Mobile App**: Native iOS/Android application
-- 🌐 **Multi-Language**: Support for multiple languages
-- 🎯 **Interview Prep**: AI-powered interview question generator
-- 📈 **Salary Insights**: Compensation data based on skills
-
----
-
-## 🔐 Security Considerations
-
-- ✅ JWT tokens with expiration
-- ✅ CORS configuration for frontend
-- ✅ Input validation & sanitization
-- ✅ SQL injection prevention (Parameterized queries)
-- ✅ Secure password hashing (BCrypt)
-- ✅ AWS IAM roles for S3 access
-- ✅ Environment variables for sensitive data
-- ✅ HTTPS enforcement in production
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/AmazingFeature`
-3. Commit changes: `git commit -m 'Add AmazingFeature'`
-4. Push to branch: `git push origin feature/AmazingFeature`
-5. Open a Pull Request
-
----
-
-## 📞 Support & Contact
-
-- 📧 **Email**: sauravbot19@gmail.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/sauravbot19/SkillGapAnalyzer/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/sauravbot19/SkillGapAnalyzer/discussions)
-- 📖 **Documentation**: [API Docs](http://localhost:8080/swagger-ui.html) (local)
-
----
 
 ## 👨‍💻 Author
 
-**Saurav** - Full-Stack Developer passionate about AI, Cloud, and scalable systems
+**Saurav Tayade** — Java Developer
 
 - GitHub: [@sauravbot19](https://github.com/sauravbot19)
-- LinkedIn: [Saurav's Profile](#)
-- Portfolio: [sauravbot19.com](#)
+- LinkedIn: [linkedin.com/in/saurav-tayade](https://www.linkedin.com/in/saurav-tayade-1147011b5/)
+- Email: tayadesaurav190@gmail.com
 
 ---
 
@@ -565,4 +455,4 @@ If this project helped you, please give it a star! ⭐
 
 ---
 
-**Made with ❤️ for career development, AI innovation, and cloud engineering**
+**Built with Java 17 · Spring Boot 4 · React · AWS · Groq AI**
